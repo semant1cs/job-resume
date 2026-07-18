@@ -1,0 +1,70 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --color-bg: #05060a;
+  --color-bg-elevated: #0b0e16;
+  --color-surface: #10141f;
+  --color-border: #1f2537;
+  --color-ink: #e6e9f2;
+  --color-ink-muted: #8b93a8;
+  --color-accent: #7dd3fc;
+  --color-accent-2: #a78bfa;
+  --color-accent-3: #34d399;
+
+  --animate-fade-up: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-blink: blink 1s steps(2, start) infinite;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes blink {
+  to {
+    opacity: 0;
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-display);
+    overflow-x: hidden;
+  }
+
+  section {
+    scroll-margin-top: 4rem;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+  }
+
+  code,
+  .font-mono-ui {
+    font-family: var(--font-mono);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
