@@ -39,11 +39,30 @@ npm run preview # локально проверить собранную ста�
 2. `_redirects`/SPA-фолбэк не нужен — снова из-за отсутствия роутера.
 3. Свой домен — Netlify Dashboard → Domain settings.
 
-## GitHub Pages (альтернатива)
+## GitHub Pages
 
-Не выбран как основной вариант, но если понадобится: нужно будет добавить
-`base: '/<repo-name>/'` в `vite.config.ts` и джоб в GitHub Actions, который
-пушит `dist/` в ветку `gh-pages`. Не настроено by default в этом проекте.
+Настроено и используется как основной вариант деплоя: репозиторий
+[github.com/semant1cs/job-resume](https://github.com/semant1cs/job-resume),
+сайт живёт на `https://semant1cs.github.io/job-resume/`.
+
+- `vite.config.ts`: `base` переключается на `/job-resume/` только когда в
+  окружении сборки выставлена переменная `GH_PAGES=true` — это делает CI
+  (см. ниже). Локальный `npm run dev`/`npm run build` и деплой на
+  Vercel/Netlify (домен в корне) остаются на `base: '/'`, ничего не ломается.
+- `.github/workflows/deploy-pages.yml`: на каждый пуш в `main` собирает
+  проект (`npm ci && npm run build` с `GH_PAGES=true`) и публикует `dist/`
+  через официальные `actions/upload-pages-artifact` + `actions/deploy-pages`
+  (без отдельной ветки `gh-pages` — GitHub сам хостит артефакт).
+- **Разовая ручная настройка** (без неё Pages не заработает даже с
+  правильным workflow): в репозитории → Settings → Pages → Build and
+  deployment → Source → выбрать **GitHub Actions**. Обычно после первого
+  запуска workflow GitHub предлагает включить это автоматически, но если нет —
+  включить руками один раз.
+- Собственный домен для GitHub Pages: Settings → Pages → Custom domain — и
+  тогда `base` в `vite.config.ts` нужно будет вернуть на `/` (домен раздаёт
+  сайт из корня, подпуть `/job-resume/` больше не нужен).
+
+## Переменные окружения
 
 ## Переменные окружения
 
@@ -66,8 +85,9 @@ npm run preview # локально проверить собранную ста�
 - [ ] Проверка на мобильном/слабом устройстве — WebGL-сцена и
       physics-плейграунд не должны давать просадку FPS на всей странице
 - [ ] Заменить плейсхолдеры в `src/data/*.ts` на реальный контент
-- [ ] Добавить `public/og-image.png` (1200×630) — сейчас в `index.html`
-      указан путь `/og-image.png`, файла ещё нет
+- [ ] Добавить `public/og-image.png` (1200×630) — в `index.html` og:image уже
+      указывает на `https://semant1cs.github.io/job-resume/og-image.png`,
+      но самого файла ещё нет
 - [ ] Заменить `public/favicon.svg` на свой, если нужно
 
 ## Опционально: CI

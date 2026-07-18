@@ -5,6 +5,10 @@ import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
+  // GitHub Pages отдаёт проектный сайт из подпути /job-resume/ — переключаем
+  // base только для CI-сборки под Pages (GH_PAGES=true), чтобы обычная
+  // локальная разработка и деплой на Vercel/Netlify (корень домена) не сломались.
+  base: process.env.GH_PAGES ? '/job-resume/' : '/',
   plugins: [vue(), tailwindcss()],
   resolve: {
     alias: {
